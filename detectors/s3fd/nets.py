@@ -104,7 +104,7 @@ class S3FDNet(nn.Module):
         ])
 
         self.softmax = nn.Softmax(dim=-1)
-        self.detect = Detect()
+        self.detect = Detect.apply
 
     def forward(self, x):
         size = x.size()[2:]
