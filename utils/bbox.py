@@ -79,7 +79,7 @@ def crop_thumbnail_(image, bounding_box, padding=1, size=100):
     return output, new_bbox
 
 
-def crop_thumbnail(image, bounding_box, padding=1, size=100):
+def crop_thumbnail(image, bounding_box, padding=1, size=100, pad_value=[255, 255, 255]):
 
     # infos in original image
     w, h = image.shape[1], image.shape[0]
@@ -96,21 +96,21 @@ def crop_thumbnail(image, bounding_box, padding=1, size=100):
     img = image.copy()
 
     if p1x < 0:
-        img = cv2.copyMakeBorder(img, top=0, bottom=0, left=-p1x, right=0, borderType=cv2.BORDER_CONSTANT, value=[0, 0, 0])
+        img = cv2.copyMakeBorder(img, top=0, bottom=0, left=-p1x, right=0, borderType=cv2.BORDER_CONSTANT, value=pad_value)
         x1 -= p1x
         x2 -= p1x
         p2x -= p1x
         p1x -= p1x
     if p1y < 0:
-        img = cv2.copyMakeBorder(img, top=-p1y, bottom=0, left=0, right=0, borderType=cv2.BORDER_CONSTANT, value=[0, 0, 0])
+        img = cv2.copyMakeBorder(img, top=-p1y, bottom=0, left=0, right=0, borderType=cv2.BORDER_CONSTANT, value=pad_value)
         y1 -= p1y
         y2 -= p1y
         p2y -= p1y
         p1y -= p1y
     if p2x > w:
-        img = cv2.copyMakeBorder(img, top=0, bottom=0, left=0, right=p2x-w, borderType=cv2.BORDER_CONSTANT, value=[0, 0, 0])
+        img = cv2.copyMakeBorder(img, top=0, bottom=0, left=0, right=p2x-w, borderType=cv2.BORDER_CONSTANT, value=pad_value)
     if p2y > h:
-        img = cv2.copyMakeBorder(img, top=0, bottom=p2y-h, left=0, right=0, borderType=cv2.BORDER_CONSTANT, value=[0, 0, 0])
+        img = cv2.copyMakeBorder(img, top=0, bottom=p2y-h, left=0, right=0, borderType=cv2.BORDER_CONSTANT, value=pad_value)
     
     output = img[p1y:p2y, p1x:p2x]
     output = cv2.resize(output, (size, size), interpolation=cv2.INTER_LINEAR)
